@@ -14,6 +14,5 @@ export class Car extends BaseEntity {
 
     @Column()
     color: string;
-
 }
 

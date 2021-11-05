@@ -5,34 +5,49 @@ import { Car } from "../entity/car.entity";
 
 
 class CarController {
-    async get(req: Request, res: Response) {
-        try {
-            const response = Car.find();
-            res.json(response)
-        } catch (error) {
-            res.json(error)
-        }
+    get(req: Request, res: Response) {
+        Car.find()
+            .then((car) => {
+                res.json(car)
+            })
+            .catch(error => res.json(error))
     }
 
-    async create(req: Request, res: Response) {
+    create(req: Request, res: Response) {
         const newCar = {
-            name: 'El carrote',
-            marca: 'buggatti',
-            placa: '123ASD12',
-            color:'blue'
+            marca: req.body.marca,
+            placa: req.body.placa,
+            color: req.body.color
         }
-
         const car = Car.create(newCar);
-        const result = await Car.save(car);
-        return res.json(result)
+        Car.save(car)
+            .then((carSaved) => res.json(carSaved))
+            .catch(error => res.json(error))
     }
 
     getOne(req: Request, res: Response) {
-
+        const response = Car.findOne(req.params.id)
+            .then((car) => {
+                res.json(car)
+            })
+            .catch(error => res.json(error))
     }
 
-    update(req: Request, res: Response) {
+    async update(req: Request, res: Response) {
+        const CarNewData = {
+            marca: 'toyota updated',
+            placa: 'KKJH2343',
+            color: 'BLACK'
+        }
+        const car = await Car.findOne(req.params.id);
 
+        if (car) {
+            Car.update(req.params.id, CarNewData)
+                .then((carSaved) => res.json(carSaved))
+                .catch(error => res.json(error))
+        }
+
+        return res.status(404).send({ message: 'Not found'});
     }
 
     delete(req: Request, res: Response) {
