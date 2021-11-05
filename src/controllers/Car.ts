@@ -51,7 +51,8 @@ class CarController {
     }
 
     delete(req: Request, res: Response) {
-
+            Car.delete(req.params.id);
+            return res.status(200).send({ message: 'User deleted successfully'});
     }
 }
 
