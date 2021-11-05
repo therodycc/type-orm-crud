@@ -47,12 +47,17 @@ class CarController {
                 .catch(error => res.json(error))
         }
 
-        return res.status(404).send({ message: 'Not found'});
+        return res.status(404).send({ message: 'Not found' });
     }
 
     delete(req: Request, res: Response) {
-            Car.delete(req.params.id);
-            return res.status(200).send({ message: 'User deleted successfully'});
+        Car.delete(req.params.id)
+            .then(() => {
+                res.status(200).send({ message: 'Car deleted successfully' });
+            })
+            .catch(() => {
+                res.status(500).send({ message: 'Error deleling car' });
+            })
     }
 }
 
